@@ -7,10 +7,13 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 
 import Chorizo from "../../static/images/Chorizo.jpg";
 import AIawwBG from "../../static/images/AIawwBG.png";
 
+// temp dummy data
 let recipeImage = null;
 const ingredients = [
   "1 cup of flour",
@@ -18,6 +21,16 @@ const ingredients = [
   "1/2 cup of sugar",
   "1 cup of milk",
 ];
+
+const instructions = [
+  "Step 1: Do something",
+  "Step 2: Do something else",
+  "Step 3: Continue doing things",
+  "Step 4: Almost there",
+  "Step 5: Finished",
+];
+// end temp dummy data
+
 
 function Home() {
   const [recipeNameInput, setRecipeNameInput] = React.useState(null);
@@ -120,6 +133,23 @@ function Home() {
           );
         })}
       </Box>
+      <Typography 
+        variant="h5" 
+        component="h2"
+        color="var(--secondary-color)"
+        sx={{ marginTop: 2 }}
+      >
+        Instructions
+      </Typography>
+      <List>
+        {instructions.map((instruction, index) => {
+          return (
+            <ListItem key={index}>
+              <Typography>{instruction}</Typography>
+            </ListItem>
+          );
+        })}
+      </List>
     </Box>
   );
 }
