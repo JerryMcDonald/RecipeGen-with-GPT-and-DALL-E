@@ -1,0 +1,25 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Python
+venv/
+
+# React
+node_modules/
+.env
+
+# IDEs and editors
+.vscode/
+
+# testing
+/coverage
+
+# Misc.
+/frontend/build
+
+
+#                     /\_/\  
+#                    / o o \ 
+#                   (   "   )
+
+
+
