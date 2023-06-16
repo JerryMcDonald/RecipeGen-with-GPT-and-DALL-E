@@ -39,6 +39,15 @@ const theme = createTheme({
           },
         },
       },
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            backgroundColor: '#d9d9d9', // secondary color
+            color: '#000000', // primary color
+          },
+        },
+      },
+      
     },
   });
 
