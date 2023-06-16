@@ -1,5 +1,6 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
+import Chip from "@mui/material/Chip";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -11,25 +12,30 @@ import Chorizo from "../../static/images/Chorizo.jpg";
 import AIawwBG from "../../static/images/AIawwBG.png";
 
 let recipeImage = null;
+const ingredients = [
+  "1 cup of flour",
+  "2 eggs",
+  "1/2 cup of sugar",
+  "1 cup of milk",
+];
 
 function Home() {
+  const [recipeNameInput, setRecipeNameInput] = React.useState(null);
   const [recipeName, setRecipeName] = React.useState(null);
 
   const handleInputChange = (event) => {
-    setRecipeName(event.target.value);
+    setRecipeNameInput(event.target.value);
   };
 
   const handleButtonClick = (event) => {
-    // do something when the button is clicked
-    setRecipeName(event.target.value);
-
+    setRecipeName(recipeNameInput);
   };
 
   return (
     <Box
       sx={{
         position: "absolute",
-        paddingTop: "90px", 
+        paddingTop: "90px",
         top: 0,
         bottom: 0,
         left: 0,
@@ -42,20 +48,27 @@ function Home() {
         opacity: 1,
       }}
     >
-      <TextField 
+      <TextField
         label="Enter recipe name"
-        value={recipeName || ""}
+        value={recipeNameInput || ""}
         onChange={handleInputChange}
+        onKeyUp={(event) => {
+          if (event.key === "Enter") {
+            handleButtonClick();
+          }
+        }}
         variant="outlined"
         color="secondary"
         sx={{ marginBottom: 2 }}
       />
-      <Button variant="contained" color="secondary" onClick={handleButtonClick}>Enter</Button>
-      <Typography 
-      variant="h4" 
-      component="h2"
-      color="var(--secondary-color)"
-      sx={{ marginTop: 2 }}
+      <Button variant="contained" color="secondary" onClick={handleButtonClick}>
+        Enter
+      </Button>
+      <Typography
+        variant="h4"
+        component="h2"
+        color="var(--secondary-color)"
+        sx={{ marginTop: 2 }}
       >
         {recipeName || "Recipe Name"}
       </Typography>
@@ -83,6 +96,30 @@ function Home() {
           </CardContent>
         )}
       </Card>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          listStyle: "none",
+          padding: 1,
+          margin: 0,
+        }}
+      >
+        {ingredients.map((ingredient, index) => {
+          return (
+            <Box key={index} sx={{ margin: 1 }}>
+              <Chip
+                label={ingredient}
+                sx={{
+                  fontWeight: "bold",
+                  fontFamily: "Arial",
+                }}
+              />
+            </Box>
+          );
+        })}
+      </Box>
     </Box>
   );
 }
