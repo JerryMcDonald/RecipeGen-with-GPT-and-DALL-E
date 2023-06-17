@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from 'axios';
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
 import CardMedia from "@mui/material/CardMedia";
@@ -13,11 +14,10 @@ import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 
-import Chorizo from "../../static/images/Chorizo.jpg";
 import AIawwBG from "../../static/images/AIawwBG.png";
 
 // temp dummy data
-let recipeImage = null;
+// let recipeImage = null;
 const ingredients = [
   "First Ingredient",
   "Second Ingredient",
@@ -36,15 +36,25 @@ const instructions = [
 
 function Home() {
   const [recipeNameInput, setRecipeNameInput] = React.useState(null);
+  const [recipeImage, setRecipeImage] = React.useState(null);
   const [recipeName, setRecipeName] = React.useState(null);
+  
 
   const handleInputChange = (event) => {
     setRecipeNameInput(event.target.value);
   };
 
-  const handleButtonClick = (event) => {
+  const handleButtonClick = () => {
     setRecipeName(recipeNameInput);
-  };
+    axios.post(`${process.env.REACT_APP_API_BASE_URL}api/dalle/generate-image`, {
+        prompt: `An nice image of a delicious meal that is called ${recipeNameInput}`
+    }).then((response) => {
+        console.log(response.data);
+        setRecipeImage(response.data.image);
+    }).catch((error) => {
+        console.error(error);
+    });
+};
 
   return (
     <Box
