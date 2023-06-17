@@ -1,18 +1,23 @@
-# /backend/dalle_api.py
-
+import os
 import openai
 from flask import current_app
+from dotenv import load_dotenv
+
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 def generate_image(prompt):
     try:
-        response = openai.ImageCompletion.create(
-            model="davinci-codex",  # Replace with your preferred model
-            prompt=prompt,
-            max_responses=1
+        response = openai.Image.create(
+        prompt=prompt,
+        n=1,
+        size="1024x1024"
         )
+        image_url = response['data'][0]['url']
 
         # Extract and return the image
-        return response.choices[0].image
+        return image_url
     except Exception as e:
         print(f"Error in generating image: {e}")
         return None
