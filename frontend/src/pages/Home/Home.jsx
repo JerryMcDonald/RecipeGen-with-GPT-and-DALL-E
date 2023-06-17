@@ -1,5 +1,5 @@
 import * as React from "react";
-import axios from 'axios';
+import axios from "axios";
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
 import CardMedia from "@mui/material/CardMedia";
@@ -15,6 +15,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 
 import AIawwBG from "../../static/images/AIawwBG.png";
+import LoadingImage from "../../components/Loading/LoadingImage";
 
 // temp dummy data
 // let recipeImage = null;
@@ -38,7 +39,7 @@ function Home() {
   const [recipeNameInput, setRecipeNameInput] = React.useState(null);
   const [recipeImage, setRecipeImage] = React.useState(null);
   const [recipeName, setRecipeName] = React.useState(null);
-  
+  const [loadingImage, setLoadingImage] = React.useState(false);
 
   const handleInputChange = (event) => {
     setRecipeNameInput(event.target.value);
@@ -46,15 +47,20 @@ function Home() {
 
   const handleButtonClick = () => {
     setRecipeName(recipeNameInput);
-    axios.post(`${process.env.REACT_APP_API_BASE_URL}api/dalle/generate-image`, {
-        prompt: `An nice image of a delicious meal that is called ${recipeNameInput}`
-    }).then((response) => {
-        console.log(response.data);
+    setLoadingImage(true);
+    axios
+      .post(`${process.env.REACT_APP_API_BASE_URL}api/dalle/generate-image`, {
+        prompt: `An nice image of a delicious meal that is called ${recipeNameInput}`,
+      })
+      .then((response) => {
         setRecipeImage(response.data.image);
-    }).catch((error) => {
+        setLoadingImage(false);
+      })
+      .catch((error) => {
         console.error(error);
-    });
-};
+        setLoadingImage(false);
+      });
+  };
 
   return (
     <Box
@@ -95,7 +101,9 @@ function Home() {
         {recipeName || "Recipe Name"}
       </Typography>
       <Card sx={{ maxWidth: 600, margin: 2 }}>
-        {recipeImage ? (
+        {loadingImage ? (
+          <LoadingImage />
+        ) : recipeImage ? (
           <CardMedia
             component="img"
             image={recipeImage}
