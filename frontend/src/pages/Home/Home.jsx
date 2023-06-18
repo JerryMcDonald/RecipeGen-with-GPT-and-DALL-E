@@ -42,6 +42,7 @@ function Home() {
   const [recipeName, setRecipeName] = React.useState(null);
   const [loadingImage, setLoadingImage] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [generatedRecipe, setGeneratedRecipe] = React.useState(null);
 
   const handleInputChange = (event) => {
     setRecipeNameInput(event.target.value);
@@ -49,17 +50,32 @@ function Home() {
 
   const handleButtonClick = () => {
     if (recipeNameInput.trim() !== "") {
-      // Recipe name is not empty
-      setOpenSnackbar(false); // Hide the notification
+      setOpenSnackbar(false);
       setRecipeName(recipeNameInput);
       setLoadingImage(true);
+
+      // Start by making a request to /generate-recipe
       axios
-        .post(`${process.env.REACT_APP_API_BASE_URL}api/dalle/generate-image`, {
-          prompt: `An nice image of a delicious meal that is called ${recipeNameInput}`,
+        .post(`${process.env.REACT_APP_API_BASE_URL}api/gpt/generate-recipe`, {
+          prompt: recipeNameInput,
         })
         .then((response) => {
-          setRecipeImage(response.data.image);
-          setLoadingImage(false);
+          let recipe = response.data.recipe; // assuming the response contains the recipe data
+          setGeneratedRecipe(recipe);
+
+          // After /generate-recipe, request /api/dalle/generate-image
+          axios
+            .post(`${process.env.REACT_APP_API_BASE_URL}api/dalle/generate-image`, {
+              prompt: `An nice image of a delicious meal that is called ${recipeNameInput}`,
+            })
+            .then((response) => {
+              setRecipeImage(response.data.image);
+              setLoadingImage(false);
+            })
+            .catch((error) => {
+              console.error(error);
+              setLoadingImage(false);
+            });
         })
         .catch((error) => {
           console.error(error);
@@ -74,6 +90,9 @@ function Home() {
   const handleSnackbarClose = () => {
     setOpenSnackbar(false); // Close the notification
   };
+
+  let displayRecipe = generatedRecipe ? generatedRecipe : recipeDummyData;
+  console.log('the current recipe', displayRecipe)
 
   return (
     <Box
@@ -129,7 +148,7 @@ function Home() {
           <Box>{recipeName || "Recipe Name"}</Box>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <AccessTime sx={{ marginRight: 2, marginLeft: 4 }} />
-            <Typography>{recipeDummyData.time_to_cook} min</Typography>
+            <Typography>{displayRecipe.time_to_cook} min</Typography>
           </Box>
         </Box>
       </Typography>
@@ -175,7 +194,7 @@ function Home() {
           margin: 0,
         }}
       >
-        {recipeDummyData.ingredients.map((ingredient, index) => {
+        {displayRecipe.ingredients.map((ingredient, index) => {
           return (
             <Box key={index} sx={{ margin: 1 }}>
               <Chip
@@ -208,7 +227,7 @@ function Home() {
           }}
         >
           <List>
-            {recipeDummyData.instructions.map((instruction, index) => (
+            {displayRecipe.instructions.map((instruction, index) => (
               <ListItem key={index}>
                 <ListItemIcon>
                   <RadioButtonCheckedIcon />
