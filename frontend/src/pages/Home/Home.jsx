@@ -68,21 +68,21 @@ function Home() {
           setLoadingImage(true);
 
           // After /generate-recipe, request /api/dalle/generate-image
-          // axios
-          //   .post(
-          //     `${process.env.REACT_APP_API_BASE_URL}api/dalle/generate-image`,
-          //     {
-          //       prompt: `An nice image of a delicious meal that is called ${recipeNameInput}`,
-          //     }
-          //   )
-          //   .then((response) => {
-          //     setRecipeImage(response.data.image);
-          //     setLoadingImage(false);
-          //   })
-          //   .catch((error) => {
-          //     console.error(error);
-          //     setLoadingImage(false);
-          //   });
+          axios
+            .post(
+              `${process.env.REACT_APP_API_BASE_URL}api/dalle/generate-image`,
+              {
+                prompt: `An nice image of a delicious meal that is called ${recipeNameInput}`,
+              }
+            )
+            .then((response) => {
+              setRecipeImage(response.data.image);
+              setLoadingImage(false);
+            })
+            .catch((error) => {
+              console.error(error);
+              setLoadingImage(false);
+            });
         })
         .catch((error) => {
           console.error(error);
@@ -161,9 +161,9 @@ function Home() {
       </Typography>
       <Card sx={{ maxWidth: 600, margin: 2 }}>
         {loadingRecipe ? (
-          <LoadingRecipe loadingText={`An nice image of a delicious meal that is called ${recipeNameInput}`} />
+          <LoadingRecipe recipeNameInput={recipeNameInput} />
         ) : loadingImage ? (
-          <LoadingImage />
+          <LoadingImage  ingredients={displayRecipe.ingredients} recipeNameInput={recipeNameInput}/>
         ) : recipeImage && generatedRecipe ? (
           <CardMedia
             component="img"
