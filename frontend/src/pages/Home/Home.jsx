@@ -2,7 +2,6 @@ import * as React from "react";
 import axios from "axios";
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
-import { Switch } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -20,6 +19,7 @@ import ListItem from "@mui/material/ListItem";
 import AIawwBG from "../../static/images/AIawwBG.png";
 import LoadingImage from "../../components/Loading/LoadingImage";
 import LoadingRecipe from "../../components/Loading/LoadingRecipe";
+import DalleSwitch from "../../components/DalleSwitch";
 
 const recipeDummyData = {
   ingredients: [
@@ -141,11 +141,12 @@ function Home() {
       <Button variant="contained" color="secondary" onClick={handleButtonClick}>
         Enter
       </Button>
-      <Switch
-        checked={dalleAPIEnabled}
-        onChange={handleSwitchChange}
-        inputProps={{ "aria-label": "controlled" }}
+
+      <DalleSwitch
+        dalleAPIEnabled={dalleAPIEnabled}
+        handleSwitchChange={handleSwitchChange}
       />
+
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={openSnackbar}
