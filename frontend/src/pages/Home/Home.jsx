@@ -2,6 +2,7 @@ import * as React from "react";
 import axios from "axios";
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
+import { Switch } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -45,16 +46,21 @@ function Home() {
   const [loadingRecipe, setLoadingRecipe] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [generatedRecipe, setGeneratedRecipe] = React.useState(null);
+  const [dalleAPIEnabled, setDalleAPIEnabled] = React.useState(true);
 
   const handleInputChange = (event) => {
     setRecipeNameInput(event.target.value);
+  };
+
+  const handleSwitchChange = (event) => {
+    setDalleAPIEnabled(event.target.checked);
   };
 
   const handleButtonClick = () => {
     if (recipeNameInput.trim() !== "") {
       setOpenSnackbar(false);
       setRecipeName(recipeNameInput);
-      setLoadingRecipe(true)
+      setLoadingRecipe(true);
 
       // Start by making a request to /generate-recipe
       axios
@@ -64,25 +70,29 @@ function Home() {
         .then((response) => {
           let recipe = response.data.recipe; // assuming the response contains the recipe data
           setGeneratedRecipe(recipe);
-          setLoadingRecipe(false)
-          setLoadingImage(true);
+          setLoadingRecipe(false);
 
-          // After /generate-recipe, request /api/dalle/generate-image
-          axios
-            .post(
-              `${process.env.REACT_APP_API_BASE_URL}api/dalle/generate-image`,
-              {
-                prompt: `An nice image of a delicious meal that is called ${recipeNameInput}`,
-              }
-            )
-            .then((response) => {
-              setRecipeImage(response.data.image);
-              setLoadingImage(false);
-            })
-            .catch((error) => {
-              console.error(error);
-              setLoadingImage(false);
-            });
+          if (dalleAPIEnabled) {
+            // Only send request to DALL-E API if the switch is enabled
+            setLoadingImage(true);
+
+            // After /generate-recipe, request /api/dalle/generate-image
+            axios
+              .post(
+                `${process.env.REACT_APP_API_BASE_URL}api/dalle/generate-image`,
+                {
+                  prompt: `An nice image of a delicious meal that is called ${recipeNameInput}`,
+                }
+              )
+              .then((response) => {
+                setRecipeImage(response.data.image);
+                setLoadingImage(false);
+              })
+              .catch((error) => {
+                console.error(error);
+                setLoadingImage(false);
+              });
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -131,6 +141,11 @@ function Home() {
       <Button variant="contained" color="secondary" onClick={handleButtonClick}>
         Enter
       </Button>
+      <Switch
+        checked={dalleAPIEnabled}
+        onChange={handleSwitchChange}
+        inputProps={{ "aria-label": "controlled" }}
+      />
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={openSnackbar}
@@ -160,36 +175,51 @@ function Home() {
         </Box>
       </Typography>
       <Card sx={{ maxWidth: 600, margin: 2 }}>
-        {loadingRecipe ? (
-          <LoadingRecipe recipeNameInput={recipeNameInput} />
-        ) : loadingImage ? (
-          <LoadingImage  ingredients={displayRecipe.ingredients} recipeNameInput={recipeNameInput}/>
-        ) : recipeImage && generatedRecipe ? (
-          <CardMedia
-            component="img"
-            image={recipeImage}
-            alt="recipe dish image"
-          />
-        ) : (
-          <CardContent
-            sx={{
-              backgroundColor: "#FFFFFF",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight: 200,
-              minWidth: 400,
-            }}
-          >
-            <Typography
-              variant="h6"
-              fontWeight="bold"
-              color="text.secondary"
-              sx={{ textAlign: "center" }}
+        {!loadingRecipe && !loadingImage ? (
+          !dalleAPIEnabled ? (
+            <CardContent
+              sx={{
+                backgroundColor: "#FFFFFF",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: 200,
+                minWidth: 400,
+              }}
             >
-              Enter a recipe name, this box will keep you updated on each step
-            </Typography>
-          </CardContent>
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                color="text.secondary"
+                sx={{ textAlign: "center" }}
+              >
+                You are not using the image API
+              </Typography>
+            </CardContent>
+          ) : recipeImage ? (
+            <CardMedia
+              component="img"
+              image={recipeImage}
+              alt="recipe dish image"
+            />
+          ) : (
+            <CardContent
+            // ...
+            >
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                color="text.secondary"
+                sx={{ textAlign: "center" }}
+              >
+                Enter a recipe name, this box will keep you updated on each step
+              </Typography>
+            </CardContent>
+          )
+        ) : loadingRecipe ? (
+          <LoadingRecipe />
+        ) : (
+          <LoadingImage />
         )}
       </Card>
       <Box
