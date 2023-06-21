@@ -76,12 +76,19 @@ function Home() {
             // Only send request to DALL-E API if the switch is enabled
             setLoadingImage(true);
 
+            // Extract the names of ingredients
+            const ingredientNames = recipe.ingredients.map((ingredient) => ingredient.name);
+
+            const recipeText = `A nice image of a delicious meal called ${recipeNameInput} made from ${ingredientNames.join(
+              ", "
+            )}`;
+
             // After /generate-recipe, request /api/dalle/generate-image
             axios
               .post(
                 `${process.env.REACT_APP_API_BASE_URL}api/dalle/generate-image`,
                 {
-                  prompt: `An nice image of a delicious meal that is called ${recipeNameInput}`,
+                  prompt: recipeText,
                 }
               )
               .then((response) => {
@@ -205,22 +212,23 @@ function Home() {
             />
           ) : (
             <CardContent
-            // ...
             >
               <Typography
                 variant="h6"
                 fontWeight="bold"
-                color="text.secondary"
                 sx={{ textAlign: "center" }}
               >
                 Enter a recipe name, this box will keep you updated on each step
+                <br />
+                You are Using the Dalle API (Change)
               </Typography>
+              
             </CardContent>
           )
         ) : loadingRecipe ? (
-          <LoadingRecipe />
+          <LoadingRecipe recipeNameInput={recipeNameInput} />
         ) : (
-          <LoadingImage />
+          <LoadingImage ingredients={displayRecipe.ingredients} recipeNameInput={recipeNameInput} />
         )}
       </Card>
       <Box
