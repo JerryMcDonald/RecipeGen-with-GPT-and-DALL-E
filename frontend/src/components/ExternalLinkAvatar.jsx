@@ -12,7 +12,7 @@ const ExternalLinkAvatar = ({ imageUrl, tooltipTitle, sidebar=false, linkUrl }) 
       <Tooltip title={tooltipTitle}>
         <IconButton 
           onClick={handleAvatarClick} 
-          sx={sidebar ? {p: 0} : { p: 0, display: {xs: "none", sm: 'block'}}}
+          sx={sidebar ? {p: 0, paddingBottom: 1} : { p: 0, display: {xs: "none", sm: 'block'}}}
         >
           <Avatar alt="Avatar" src={imageUrl} />
         </IconButton>
