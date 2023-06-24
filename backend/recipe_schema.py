@@ -30,7 +30,7 @@ schema = {
         },
         "visual_discription_of_image": {
             "type": "string",
-            "description": "A prompt to Dalle to get the most accurate depiction of this item, please base it off of the ingredients and instructions, Get very detailed up to 300 characters",
+            "description": "The most accurate depiction of this item after cooking, please include information from the ingredients and instructions to improve the detail of the depiction, you can use up to 300 characters and get as detailed as possible.",
         },
     },
     "required": ["ingredients", "instructions", "time_to_cook"],
