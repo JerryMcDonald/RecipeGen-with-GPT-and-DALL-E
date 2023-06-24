@@ -1,25 +1,16 @@
 import * as React from "react";
 import axios from "axios";
-import Card from "@mui/material/Card";
-import Chip from "@mui/material/Chip";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import AccessTime from "@mui/icons-material/AccessTime";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 
 import AIawwBG from "../../static/images/AIawwBG.png";
-import LoadingImage from "../../components/Loading/LoadingImage";
-import LoadingRecipe from "../../components/Loading/LoadingRecipe";
 import DalleSwitch from "../../components/DalleSwitch";
+import RecipeCard from "../../components/RecipeCard";
+import IngredientChips from "../../components/IngredientChips";
+import InstructionList from "../../components/InstructionList";
+import RecipeForm from "../../components/RecipeForm";
 
 const recipeDummyData = {
   ingredients: [
@@ -40,14 +31,15 @@ const recipeDummyData = {
 
 function Home() {
   const [recipeNameInput, setRecipeNameInput] = React.useState("");
-  const [recipeImage, setRecipeImage] = React.useState(null);
   const [recipeName, setRecipeName] = React.useState(null);
   const [loadingImage, setLoadingImage] = React.useState(false);
   const [loadingRecipe, setLoadingRecipe] = React.useState(false);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [generatedRecipe, setGeneratedRecipe] = React.useState(null);
+  const [generatedImage, setGeneratedImage] = React.useState(null);
   const [dalleAPIEnabled, setDalleAPIEnabled] = React.useState(true);
   const [promptSentToDalle, setPromptSentToDalle] = React.useState("");
+  const [snackbarMessage, setSnackbarMessage] = React.useState("");
 
   const handleInputChange = (event) => {
     setRecipeNameInput(event.target.value);
@@ -57,13 +49,14 @@ function Home() {
     setDalleAPIEnabled(event.target.checked);
   };
 
-  const handleButtonClick = () => {
+  const onGenerateRecipe = () => {
     if (recipeNameInput.trim() !== "") {
       setOpenSnackbar(false);
       setRecipeName(recipeNameInput);
       setLoadingRecipe(true);
-      // reset the generated recipe
+      // reset the generated recipe and generated image
       setGeneratedRecipe(null);
+      setGeneratedImage(null);
 
       // Start by making a request to /generate-recipe
       axios
@@ -75,24 +68,20 @@ function Home() {
           setGeneratedRecipe(recipe);
           setLoadingRecipe(false);
 
-          // Extract the names of ingredients
-          const ingredientNames = recipe.ingredients
-            .map((ingredient) => ingredient.name)
-            .join(", ");
-          const seriousToSillyRating = recipe.serious_to_silly_rating;
+          const dallePrompt = recipe.visual_discription_of_image;
 
-          // compose the prompt based off the seriousness of the recipe name
-          console.log(seriousToSillyRating, "rating in then statement");
-          let recipeText = "";
-          if (seriousToSillyRating <= 5) {
-            recipeText = `A nice image of a delicious meal called ${recipeNameInput} made from ${ingredientNames}`;
-          } else if (seriousToSillyRating <= 8) {
-            recipeText = `A silly image of a fun meal called ${recipeNameInput} made from ${ingredientNames}`;
-          } else {
-            recipeText = `An image of something called ${recipeNameInput}, this is definitely not food, and these items should also be in the image: ${ingredientNames}`;
-          }
+          // Here is the old way I was trying to build an accurate promp,
+          // before realizing that I could just have ChatGPT make me an image prompt
+          // const seriousToSillyRating = recipe.serious_to_silly_rating;
+          // if (seriousToSillyRating <= 5) {
+          //   dallePrompt = `A nice image of a delicious meal called ${recipeNameInput}, ingredients ${ingredientNames}`;
+          // } else if (seriousToSillyRating <= 8) {
+          //   dallePrompt = `A silly image of a fun meal called ${recipeNameInput}, ingredients ${ingredientNames}`;
+          // } else {
+          //   dallePrompt = `An image of something called ${recipeNameInput}, ingredients: ${ingredientNames}`;
+          // }
 
-          setPromptSentToDalle(recipeText);
+          setPromptSentToDalle(dallePrompt);
 
           if (dalleAPIEnabled) {
             // Only send request to DALL-E API if the switch is enabled
@@ -103,25 +92,36 @@ function Home() {
               .post(
                 `${process.env.REACT_APP_API_BASE_URL}api/dalle/generate-image`,
                 {
-                  prompt: recipeText,
+                  prompt: dallePrompt,
                 }
               )
               .then((response) => {
-                setRecipeImage(response.data.image);
+                setGeneratedImage(response.data.image);
                 setLoadingImage(false);
               })
               .catch((error) => {
                 console.error(error);
                 setLoadingImage(false);
+                // There was a problem loading the image
+                setSnackbarMessage("There was a problem loading the Image");
+                setOpenSnackbar(true); // Show the notification
+                console.log("Image Error", error);
               });
           }
         })
         .catch((error) => {
-          console.error(error);
-          setLoadingImage(false);
+          setLoadingRecipe(false);
+          // there was a problem loading the Recipe
+          setSnackbarMessage(
+            "There was a problem loading the Recipe, please try another name"
+          );
+          setOpenSnackbar(true); // Show the notification
+
+          console.log("Recipe Error", error);
         });
     } else {
       // Recipe name is empty
+      setSnackbarMessage("Please enter a recipe name.");
       setOpenSnackbar(true); // Show the notification
     }
   };
@@ -131,80 +131,6 @@ function Home() {
   };
 
   let displayRecipe = generatedRecipe ? generatedRecipe : recipeDummyData;
-  console.log("the current recipe", displayRecipe);
-
-  const renderCardContents = () => {
-    if (loadingRecipe) {
-      return <LoadingRecipe recipeNameInput={recipeNameInput} />;
-    } else if (loadingImage) {
-      return (
-        <LoadingImage
-          recipeNameInput={recipeNameInput}
-          promptSentToDalle={promptSentToDalle}
-          seriousToSillyRating={displayRecipe.serious_to_silly_rating}
-        />
-      );
-    } else if (!recipeImage) {
-      return (
-        <CardContent
-          sx={{
-            backgroundColor: "#FFFFFF",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: 200,
-            minWidth: 400,
-          }}
-        >
-          <Typography
-            variant="h6"
-            fontWeight="bold"
-            color="text.secondary"
-            sx={{ textAlign: "center" }}
-          >
-            {(promptSentToDalle.trim() !== "" && (
-              <>
-                This is how silly ChatGPT rated your recipe name (1-10): <br />
-                <span style={{ color: "black" }}>
-                  {displayRecipe.serious_to_silly_rating} <br />
-                  {displayRecipe.serious_to_silly_rating >= 9 && (
-                    <>
-                      Your Crazy!
-                      <br />
-                    </>
-                  )}
-                </span>{" "}
-                <br />
-                You can paste the following image prompt at{" "}
-                <a href="https://labs.openai.com/">DALL-E</a>, using the free
-                credits they give you:
-                <br />
-                <br />
-                {promptSentToDalle}
-              </>
-            )) || (
-              <>
-                Enter a recipe name, this box will keep you updated on each step
-                <br />
-                {dalleAPIEnabled
-                  ? "You are using the Dalle API"
-                  : "You are not using the image API"}
-                <br />
-              </>
-            )}
-          </Typography>
-        </CardContent>
-      );
-    } else {
-      return (
-        <CardMedia
-          component="img"
-          image={recipeImage}
-          alt="recipe dish image"
-        />
-      );
-    }
-  };
 
   return (
     <Box
@@ -220,22 +146,11 @@ function Home() {
         paddingTop: "90px",
       }}
     >
-      <TextField
-        label="Enter recipe name"
-        value={recipeNameInput || ""}
-        onChange={handleInputChange}
-        onKeyUp={(event) => {
-          if (event.key === "Enter") {
-            handleButtonClick();
-          }
-        }}
-        variant="outlined"
-        color="secondary"
-        sx={{ marginBottom: 2 }}
+      <RecipeForm
+        onGenerateRecipe={onGenerateRecipe}
+        recipeNameInput={recipeNameInput}
+        handleInputChange={handleInputChange}
       />
-      <Button variant="contained" color="secondary" onClick={handleButtonClick}>
-        Enter
-      </Button>
 
       <DalleSwitch
         dalleAPIEnabled={dalleAPIEnabled}
@@ -247,7 +162,7 @@ function Home() {
         open={openSnackbar}
         autoHideDuration={3000}
         onClose={handleSnackbarClose}
-        message="Please enter a recipe name."
+        message={snackbarMessage}
       />
       <Typography
         variant="h4"
@@ -270,31 +185,16 @@ function Home() {
           </Box>
         </Box>
       </Typography>
-      <Card sx={{ maxWidth: 600, margin: 2 }}>{renderCardContents()}</Card>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          listStyle: "none",
-          padding: 1,
-          margin: 0,
-        }}
-      >
-        {displayRecipe.ingredients.map((ingredient, index) => {
-          return (
-            <Box key={index} sx={{ margin: 1 }}>
-              <Chip
-                label={`${ingredient.name} - ${ingredient.amount} ${ingredient.unit}`}
-                sx={{
-                  fontWeight: "bold",
-                  fontFamily: "Arial",
-                }}
-              />
-            </Box>
-          );
-        })}
-      </Box>
+      <RecipeCard
+        loadingRecipe={loadingRecipe}
+        loadingImage={loadingImage}
+        generatedImage={generatedImage}
+        recipeNameInput={recipeNameInput}
+        promptSentToDalle={promptSentToDalle}
+        dalleAPIEnabled={dalleAPIEnabled}
+        displayRecipe={displayRecipe}
+      />
+      <IngredientChips ingredients={displayRecipe.ingredients} />
       <Typography
         variant="h5"
         component="h2"
@@ -303,28 +203,7 @@ function Home() {
       >
         Instructions
       </Typography>
-      <List>
-        <Box
-          sx={{
-            width: "500px",
-            margin: "0 auto",
-            backgroundColor: "var(--secondary-color)",
-            padding: "16px",
-            borderRadius: "8px",
-          }}
-        >
-          <List>
-            {displayRecipe.instructions.map((instruction, index) => (
-              <ListItem key={index}>
-                <ListItemIcon>
-                  <RadioButtonCheckedIcon />
-                </ListItemIcon>
-                <ListItemText primary={instruction} />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </List>
+      <InstructionList instructions={displayRecipe.instructions} />
     </Box>
   );
 }
