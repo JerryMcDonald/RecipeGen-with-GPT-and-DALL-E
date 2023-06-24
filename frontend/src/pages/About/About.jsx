@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Card,
-  CardActionArea,
-  Typography,
-  Avatar,
-  CardContent,
-  IconButton,
-} from "@mui/material";
+import { Box, Card, Typography, CardContent, IconButton } from "@mui/material";
 import AIawwBG from "../../static/images/AIawwBG.png";
 import AIawwLogo from "../../static/images/AIawwLogo.png";
 import SimonIcon from "../../static/images/SimonIcon.webp";
@@ -15,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 // eslint-disable-next-line no-unused-vars
 import { Facebook, Twitter, GitHub } from "@mui/icons-material";
+import ExternalLinkAvatar from "../../components/ExternalLinkAvatar";
 
 const About = () => {
   return (
@@ -37,6 +30,7 @@ const About = () => {
           justifyContent: "center",
           gap: "20px",
           width: "100%",
+          marginBottom: "90px",
         }}
       >
         <Card
@@ -82,13 +76,13 @@ const About = () => {
                     paddingBottom: "6px",
                   }}
                 >
-                  <CardActionArea
-                    component="a"
-                    href="https://www.youtube.com/c/AIAndWebWatch"
-                    target="_blank"
-                  >
-                    <Avatar src={AIawwLogo} sx={{ width: 36, height: 36 }} />
-                  </CardActionArea>
+                  <ExternalLinkAvatar
+                    imageUrl={AIawwLogo}
+                    tooltipTitle="Visit AI And Web Watch on Youtube"
+                    sidebar={true}
+                    linkUrl="https://www.youtube.com/@Jerrysaiwebwatch"
+                  />
+                  {/* </CardActionArea> */}
                 </Box>
               </Grid>
               <Divider sx={{ marginBottom: 1 }} />
@@ -155,14 +149,6 @@ const About = () => {
                   >
                     <Facebook />
                   </IconButton>
-                  {/* <IconButton
-                    href=""
-                    target="_blank"
-                    rel="noopener"
-                    aria-label="This is my twitter page"
-                  >
-                    <Twitter />
-                  </IconButton> */}
                   <IconButton
                     href="https://github.com/JerryMcDonald"
                     target="_blank"
@@ -233,7 +219,7 @@ const About = () => {
                   sx={{ display: "flex", alignItems: "center", marginRight: 2 }}
                 >
                   <Typography variant="h6" gutterBottom>
-                  Inspiration For RecipeGen
+                    Inspiration For RecipeGen
                   </Typography>
                 </Box>
                 <Box
@@ -243,19 +229,18 @@ const About = () => {
                     paddingBottom: "6px",
                   }}
                 >
-                  <CardActionArea
-                    component="a"
-                    href="https://yonom.substack.com/p/native-json-output-from-gpt-4"
-                    target="_blank"
-                  >
-                    <Avatar src={SimonIcon} sx={{ width: 36, height: 36 }} />
-                  </CardActionArea>
+                  <ExternalLinkAvatar
+                    imageUrl={SimonIcon}
+                    tooltipTitle="Visit Simon's Blog"
+                    sidebar={true}
+                    linkUrl="https://yonom.substack.com/p/native-json-output-from-gpt-4"
+                  />
                 </Box>
               </Grid>
               <Divider sx={{ marginBottom: 1 }} />
               <Typography variant="body1" sx={{ marginBottom: 2 }}>
-                I was digging around for info on the OpenAI API update when I hit
-                upon Simon's article. He really knows his stuff, not just
+                I was digging around for info on the OpenAI API update when I
+                hit upon Simon's article. He really knows his stuff, not just
                 explaining the update but showing how to put it to work building
                 and sending schemas. I saw his mockup for a recipe site and
                 thought, 'Man, that's cool.' I realized it'd be a blast to build

@@ -78,6 +78,7 @@ function Navigation(props) {
           imageUrl={AIawwLogo}
           tooltipTitle="Visit AI And Web Watch on Youtube"
           sidebar={true}
+          linkUrl='https://www.youtube.com/@Jerrysaiwebwatch'
         />
       </Box>
     </Box>
@@ -116,6 +117,7 @@ function Navigation(props) {
             sx={{ display: { xs: "none", sm: "block" } }}
             imageUrl={AIawwLogo}
             tooltipTitle="Visit AI And Web Watch on Youtube"
+            linkUrl='https://www.youtube.com/@Jerrysaiwebwatch'
           />
         </Toolbar>
       </AppBar>

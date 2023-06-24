@@ -3,11 +3,9 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 
-const YoutubeChannelUrl = 'https://www.youtube.com/@Jerrysaiwebwatch'
-
-const ExternalLinkAvatar = ({ imageUrl, tooltipTitle, sidebar=false }) => {
+const ExternalLinkAvatar = ({ imageUrl, tooltipTitle, sidebar=false, linkUrl }) => {
     const handleAvatarClick = () => {
-      window.open(YoutubeChannelUrl, '_blank');
+      window.open(linkUrl, '_blank');
     };
   
     return (
