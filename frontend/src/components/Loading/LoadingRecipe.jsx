@@ -33,11 +33,11 @@ function LoadingRecipe({ recipeNameInput }) {
         <CircularProgress />
       </Box>
       <Typography variant="h6" fontWeight="bold" color="text.secondary" textAlign="center">
-        Recipe Is loading  <br/>
-        The prompt being sent to the ChatCompletions API is: <br/>
+        Recipe Is loading  <br/> <br />
+        The prompt being sent to the ChatCompletions API is: <br/> <br />
         <span style={{ color: 'black' }}>You are a helpful assistant. {`Provide a recipe for ${recipeNameInput}`} <br/>
         (along with the schema in backend/recipe_schema.py)
-        </span> <br/>
+        </span> <br/> <br />
         This could take up to 15 seconds <br/>
         {countdown} <br/>
         {countdown <= 0 && countdown > -10 && 'It is still loading.....at least I have chicken..'}
