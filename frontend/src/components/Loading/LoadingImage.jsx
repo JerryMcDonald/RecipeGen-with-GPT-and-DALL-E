@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 
 import Typography from "@mui/material/Typography";
 
-function LoadingImage({ ingredients, recipeNameInput }) {
+function LoadingImage({ recipeNameInput, promptSentToDalle, seriousToSillyRating }) {
   const [countdown, setCountdown] = useState(15);
 
   useEffect(() => {
@@ -18,13 +18,6 @@ function LoadingImage({ ingredients, recipeNameInput }) {
     };
   }, []);
 
-  // Extract the names of ingredients
-  const ingredientNames = ingredients.map((ingredient) => ingredient.name);
-
-  // Construct the recipe text
-  const recipeText = `A nice image of a delicious meal called ${recipeNameInput} made from ${ingredientNames.join(
-    ", "
-  )}`;
   return (
     <CardContent
       sx={{
@@ -46,9 +39,15 @@ function LoadingImage({ ingredients, recipeNameInput }) {
         textAlign="center"
       >
         Image Is loading <br />
+        This is how silly ChatGPT rated your recipe name (1-10): <br />
+        <span style={{ color: "black" }}>
+          {seriousToSillyRating} <br />
+          {(seriousToSillyRating) >= 9 && <>Your Crazy!<br /></>}
+        </span>{" "}
+        <br />
         The prompt being sent to DALL-E API is: <br />
         <span style={{ color: "black" }}>
-          {recipeText} <br />
+          {promptSentToDalle} <br />
         </span>{" "}
         <br />
         This could take up to 15 seconds <br />

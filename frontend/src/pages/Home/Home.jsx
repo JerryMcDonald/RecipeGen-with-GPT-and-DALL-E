@@ -47,6 +47,7 @@ function Home() {
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [generatedRecipe, setGeneratedRecipe] = React.useState(null);
   const [dalleAPIEnabled, setDalleAPIEnabled] = React.useState(true);
+  const [promptSentToDalle, setPromptSentToDalle] = React.useState('');
 
   const handleInputChange = (event) => {
     setRecipeNameInput(event.target.value);
@@ -77,11 +78,23 @@ function Home() {
             setLoadingImage(true);
 
             // Extract the names of ingredients
-            const ingredientNames = recipe.ingredients.map((ingredient) => ingredient.name);
+            const ingredientNames = recipe.ingredients.map((ingredient) => ingredient.name).join(
+              ", ");
+            const seriousToSillyRating = recipe.serious_to_silly_rating
 
-            const recipeText = `A nice image of a delicious meal called ${recipeNameInput} made from ${ingredientNames.join(
-              ", "
-            )}`;
+            // compose the prompt based off the seriousness of the recipe name
+            console.log(seriousToSillyRating, 'rating in then statement')
+            let recipeText = ""
+            if (seriousToSillyRating <= 5) {
+              recipeText = `A nice image of a delicious meal called ${recipeNameInput} made from ${ingredientNames}`;
+            } else if (seriousToSillyRating <= 8) {
+              recipeText = `A silly image of a fun meal called ${recipeNameInput} made from ${ingredientNames}`;
+            } else {
+              recipeText = `An image of something called ${recipeNameInput}, this is definitely not food, and these items should also be in the image: ${ingredientNames}`;
+            }
+
+    
+            setPromptSentToDalle(recipeText)
 
             // After /generate-recipe, request /api/dalle/generate-image
             axios
@@ -228,7 +241,7 @@ function Home() {
         ) : loadingRecipe ? (
           <LoadingRecipe recipeNameInput={recipeNameInput} />
         ) : (
-          <LoadingImage ingredients={displayRecipe.ingredients} recipeNameInput={recipeNameInput} />
+          <LoadingImage recipeNameInput={recipeNameInput} promptSentToDalle={promptSentToDalle} seriousToSillyRating={displayRecipe.serious_to_silly_rating} />
         )}
       </Card>
       <Box

@@ -27,6 +27,10 @@ schema = {
         "time_to_cook": {
             "type": "number",
             "description": "Total time to prepare the recipe in minutes"
+        },
+        "serious_to_silly_rating": {
+            "type": "number",
+            "description": "On a scale of 1 to 10, 1 being a legitimate and a serious recipe name, and 10 being really silly and definitely not food, what would you rate this recipe?",
         }
     },
     "required": ["ingredients", "instructions", "time_to_cook"]
