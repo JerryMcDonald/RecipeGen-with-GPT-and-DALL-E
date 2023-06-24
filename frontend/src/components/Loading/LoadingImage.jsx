@@ -39,12 +39,6 @@ function LoadingImage({ recipeNameInput, promptSentToDalle, seriousToSillyRating
         textAlign="center"
       >
         Image Is loading <br />
-        This is how silly ChatGPT rated your recipe name (1-10): <br />
-        <span style={{ color: "black" }}>
-          {seriousToSillyRating} <br />
-          {(seriousToSillyRating) >= 9 && <>Your Crazy!<br /></>}
-        </span>{" "}
-        <br />
         The prompt being sent to DALL-E API is: <br />
         <span style={{ color: "black" }}>
           {promptSentToDalle} <br />
