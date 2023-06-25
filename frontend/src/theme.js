@@ -10,21 +10,24 @@ const theme = createTheme({
       },
       secondary: {
         light: "#e0e0e0",
-        main: "#d9d9d9",
+        main: "#fcfcfc",
         dark: "#979797",
         contrastText: "#000",
+      },
+      text: {
+        accent: '#312f2f'
       },
     },
     components: {
       MuiOutlinedInput: {
         styleOverrides: {
           root: {
-            color: '#d9d9d9', // Set input text color
+            color: '#fcfcfc', // Set input text color
             '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#d9d9d9', // Border color
+              borderColor: '#fcfcfc', // Border color
             },
             '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#d9d9d9', // Border color on hover
+              borderColor: '#fcfcfc', // Border color on hover
             },
           },
         },
@@ -32,9 +35,9 @@ const theme = createTheme({
       MuiFormLabel: {
         styleOverrides: {
           root: {
-            color: '#d9d9d9', // Label color
+            color: '#fcfcfc', // Label color
             '&.Mui-focused': {
-              color: '#d9d9d9', // Label color when focused
+              color: '#fcfcfc', // Label color when focused
             },
           },
         },
@@ -42,7 +45,7 @@ const theme = createTheme({
       MuiChip: {
         styleOverrides: {
           root: {
-            backgroundColor: '#d9d9d9', // secondary color
+            backgroundColor: '#fcfcfc', // secondary color
             color: '#000000', // primary color
           },
         },

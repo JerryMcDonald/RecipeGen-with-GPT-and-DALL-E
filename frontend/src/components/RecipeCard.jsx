@@ -7,14 +7,14 @@ import Typography from "@mui/material/Typography";
 import LoadingImage from "./Loading/LoadingImage";
 import LoadingRecipe from "./Loading/LoadingRecipe";
 
-function RecipeCard({ 
-  loadingRecipe, 
-  loadingImage, 
-  generatedImage, 
-  recipeNameInput, 
-  promptSentToDalle, 
-  dalleAPIEnabled, 
-  displayRecipe 
+function RecipeCard({
+  loadingRecipe,
+  loadingImage,
+  generatedImage,
+  recipeNameInput,
+  promptSentToDalle,
+  dalleAPIEnabled,
+  displayRecipe,
 }) {
   // your renderCardContents function here
   const renderCardContents = () => {
@@ -32,7 +32,7 @@ function RecipeCard({
       return (
         <CardContent
           sx={{
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--secondary-color)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -43,7 +43,7 @@ function RecipeCard({
           <Typography
             variant="h6"
             fontWeight="bold"
-            color="text.secondary"
+            color="text.accent"
             sx={{ textAlign: "center" }}
           >
             {(promptSentToDalle.trim() !== "" && (
@@ -79,13 +79,7 @@ function RecipeCard({
     }
   };
 
-  return (
-    <Card sx={{ maxWidth: 600, margin: 2 }}>
-      {renderCardContents()}
-    </Card>
-  );
+  return <Card sx={{ maxWidth: 600, margin: 2 }}>{renderCardContents()}</Card>;
 }
 
 export default RecipeCard;
-
-  

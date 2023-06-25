@@ -5,7 +5,11 @@ import Box from "@mui/material/Box";
 
 import Typography from "@mui/material/Typography";
 
-function LoadingImage({ recipeNameInput, promptSentToDalle, seriousToSillyRating }) {
+function LoadingImage({
+  recipeNameInput,
+  promptSentToDalle,
+  seriousToSillyRating,
+}) {
   const [countdown, setCountdown] = useState(15);
 
   useEffect(() => {
@@ -21,7 +25,7 @@ function LoadingImage({ recipeNameInput, promptSentToDalle, seriousToSillyRating
   return (
     <CardContent
       sx={{
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "var(--secondary-color)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -35,7 +39,7 @@ function LoadingImage({ recipeNameInput, promptSentToDalle, seriousToSillyRating
       <Typography
         variant="h6"
         fontWeight="bold"
-        color="text.secondary"
+        color="text.accent"
         textAlign="center"
       >
         Image Is loading <br />

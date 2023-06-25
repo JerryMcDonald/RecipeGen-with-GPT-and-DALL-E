@@ -180,7 +180,7 @@ function Home() {
           <Box>{recipeName || "Recipe Name"}</Box>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <AccessTime sx={{ marginRight: 2, marginLeft: 4 }} />
-            <Typography>{displayRecipe.time_to_cook} min</Typography>
+            <Typography color="var(--secondary-color)">{displayRecipe.time_to_cook} min</Typography>
           </Box>
         </Box>
       </Typography>

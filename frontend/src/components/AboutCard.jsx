@@ -26,7 +26,7 @@ const AboutCard = ({ title, textArray, icon }) => {
       >
         <Grid item sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ display: "flex", alignItems: "center", marginRight: 2 }}>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom color="text.accent">
               {title}
             </Typography>
           </Box>
@@ -34,7 +34,12 @@ const AboutCard = ({ title, textArray, icon }) => {
         </Grid>
         <Divider sx={{ marginBottom: 1 }} />
         {textArray.map((text, index) => (
-          <Typography variant="body1" sx={{ marginBottom: 2 }} key={index}>
+          <Typography
+            variant="body1"
+            sx={{ marginBottom: 2 }}
+            key={index}
+            color="text.accent"
+          >
             {text}
           </Typography>
         ))}

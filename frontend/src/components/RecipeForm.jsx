@@ -18,7 +18,12 @@ function RecipeForm({ onGenerateRecipe, recipeNameInput, handleInputChange }) {
         color="secondary"
         sx={{ marginBottom: 2 }}
       />
-      <Button variant="contained" color="secondary" onClick={onGenerateRecipe}>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={onGenerateRecipe}
+        sx={{ color: "text.accent" }}
+      >
         Enter
       </Button>
     </>

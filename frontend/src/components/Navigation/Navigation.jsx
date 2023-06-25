@@ -38,7 +38,12 @@ function Navigation(props) {
 
   // Helper function to render navigation links
   const renderNavLink = (label, path) => (
-    <Button key={path} component={RouterLink} to={path} sx={{ color: "#fff" }}>
+    <Button
+      key={path}
+      component={RouterLink}
+      to={path}
+      sx={{ color: "var(--secondary-color)" }}
+    >
       {label}
     </Button>
   );
@@ -57,7 +62,7 @@ function Navigation(props) {
           textAlign: "center",
         }}
       >
-        <Typography variant="h6" sx={{ my: 2 }}>
+        <Typography variant="h6" sx={{ my: 2 }} color="var(--secondary-color)">
           RecipeGen
         </Typography>
         <Divider />
@@ -69,7 +74,10 @@ function Navigation(props) {
                 to={path}
                 sx={{ textAlign: "center" }}
               >
-                <ListItemText primary={label} />
+                <ListItemText
+                  primaryTypographyProps={{ sx: { color: "var(--secondary-color)" } }}
+                  primary={label}
+                />
               </ListItemButton>
             </ListItem>
           ))}
@@ -78,7 +86,7 @@ function Navigation(props) {
           imageUrl={AIawwLogo}
           tooltipTitle="Visit AI And Web Watch on Youtube"
           sidebar={true}
-          linkUrl='https://www.youtube.com/@Jerrysaiwebwatch'
+          linkUrl="https://www.youtube.com/@Jerrysaiwebwatch"
         />
       </Box>
     </Box>
@@ -105,7 +113,12 @@ function Navigation(props) {
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, marginRight: '-50px', display: { xs: "none", sm: "block" } }}
+            color="var(--secondary-color)"
+            sx={{
+              flexGrow: 1,
+              marginRight: "-50px",
+              display: { xs: "none", sm: "block" },
+            }}
           >
             RecipeGen
           </Typography>
@@ -117,7 +130,7 @@ function Navigation(props) {
             sx={{ display: { xs: "none", sm: "block" } }}
             imageUrl={AIawwLogo}
             tooltipTitle="Visit AI And Web Watch on Youtube"
-            linkUrl='https://www.youtube.com/@Jerrysaiwebwatch'
+            linkUrl="https://www.youtube.com/@Jerrysaiwebwatch"
           />
         </Toolbar>
       </AppBar>

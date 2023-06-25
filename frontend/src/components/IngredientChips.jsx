@@ -21,6 +21,7 @@ function IngredientChips({ ingredients }) {
             sx={{
               fontWeight: "bold",
               fontFamily: "Arial",
+              color: "text.accent",
             }}
           />
         </Box>

@@ -21,10 +21,13 @@ function InstructionList({ instructions }) {
         <List>
           {instructions.map((instruction, index) => (
             <ListItem key={index}>
-              <ListItemIcon>
+              <ListItemIcon sx={{ color: "text.accent" }}>
                 <RadioButtonCheckedIcon />
               </ListItemIcon>
-              <ListItemText primary={instruction} />
+              <ListItemText
+                primary={instruction}
+                primaryTypographyProps={{ sx: { color: "text.accent" } }}
+              />
             </ListItem>
           ))}
         </List>
