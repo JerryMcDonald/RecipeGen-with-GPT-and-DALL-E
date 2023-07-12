@@ -48,7 +48,7 @@ You need to have Python 3.6 or higher and pip installed on your system.
 
     - On Windows:
         ```
-        .\\venv\\Scripts\\activate
+        source .\\venv\\Scripts\\activate
         ```
 
 6. Install the Python dependencies from `requirements.txt`:
