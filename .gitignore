@@ -6,7 +6,7 @@ venv/
 
 # React
 node_modules/
-.env
+/frontend/build
 
 # IDEs and editors
 .vscode/
@@ -15,7 +15,7 @@ node_modules/
 /coverage
 
 # Misc.
-/frontend/build
+.env
 
 
 #                     /\_/\  

@@ -19,6 +19,7 @@ You need to have Python 3.6 or higher and pip installed on your system.
     ```
 
 2. Create a `.env` file in the `backend` directory with the following content:
+    (or rename `.env.sample` and delete the `.sample`)
 
     ```
     OPENAI_API_KEY=your_openai_api_key
@@ -47,7 +48,7 @@ You need to have Python 3.6 or higher and pip installed on your system.
 
     - On Windows:
         ```
-        .\\venv\\Scripts\\activate
+        source .\\venv\\Scripts\\activate
         ```
 
 6. Install the Python dependencies from `requirements.txt`:
