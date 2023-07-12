@@ -18,19 +18,28 @@ You need to have Python 3.6 or higher and pip installed on your system.
     git clone https://github.com/yourusername/recipegen.git
     ```
 
-2. Navigate to the backend directory:
+2. Create a `.env` file in the `backend` directory with the following content:
+    (or rename `.env.sample` and delete the `.sample`)
+
+    ```
+    OPENAI_API_KEY=your_openai_api_key
+    ```
+
+   Replace `your_openai_api_key` with your actual OpenAI key. This should be kept secret and not be committed to your repository.
+
+3. Navigate to the backend directory:
 
     ```
     cd recipegen/backend
     ```
 
-3. Create a Python virtual environment:
+4. Create a Python virtual environment:
 
     ```
     python -m venv venv
     ```
 
-4. Activate the virtual environment:
+5. Activate the virtual environment:
 
     - On macOS, Linux, Node:
         ```
@@ -42,21 +51,12 @@ You need to have Python 3.6 or higher and pip installed on your system.
         .\\venv\\Scripts\\activate
         ```
 
-5. Install the Python dependencies from `requirements.txt`:
+6. Install the Python dependencies from `requirements.txt`:
 
     ```
     pip install -r requirements.txt
     ```
 
-6. Create a `.env` file in the `backend` directory with the following content:
-
-    ```
-    SECRET_KEY=your_secret_key
-    OPENAI_API_KEY=your_openai_api_key
-    DALLE_API_KEY=your_dalle_api_key
-    ```
-
-   Replace `your_secret_key`, `your_openai_api_key`, and `your_dalle_api_key` with your actual secret key for Flask and your actual OpenAI and DALL-E API keys. These should be kept secret and not be committed to your repository.
 
 7. Run the application:
 
