@@ -63,7 +63,7 @@ This tells your application the URL of your backend API.
 You're all set! Start the application by running:
 
 ```bash
-npm start start
+npm run start
 ```
 
 Your application will now be running on [http://localhost:3000](http://localhost:3000).
